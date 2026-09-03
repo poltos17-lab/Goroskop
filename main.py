@@ -12,11 +12,11 @@ from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-config = ConfigParser()
-config.read("config.ini")
+#config = ConfigParser()
+#config.read("config.ini")
 
 
-TOKEN = config.get("bot", "TOKEN")
+#TOKEN = config.get("bot", "TOKEN")
 
 dp = Dispatcher()
 
