@@ -13,7 +13,9 @@ from aiogram.filters import CommandStart
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 
+TOKEN = os.getenv("TOKEN")
 
+bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 # 1. Загружаем гороскопы из файла при старте программы
