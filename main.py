@@ -92,7 +92,7 @@ async def process_zodiac_choice(callback: CallbackQuery) -> None:
 
 
 async def main() -> None:
-    bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     await dp.start_polling(bot)
 
 
