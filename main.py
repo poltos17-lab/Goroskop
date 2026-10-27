@@ -133,6 +133,26 @@ async def process_zodiac_choice(callback: CallbackQuery) -> None:
 
     await callback.message.answer(final_text)
 
+    # Создаем кнопку «Назад»
+    back_keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="◀️ Выбрать другой знак", callback_data="back_to_signs")]
+        ]
+    )
+
+    # Отправляем сообщение вместе с кнопкой
+    await callback.message.answer(final_text, reply_markup=back_keyboard)
+
+
+@dp.callback_query(F.data == "back_to_signs")
+async def back_to_signs_handler(callback: CallbackQuery) -> None:
+    await callback.answer()
+    
+    # Отправляем клавиатуру со всеми знаками (используем ту же функцию клавиатуры, что и в /start)
+    await callback.message.answer(
+        "Выберите знак зодиака:",
+        reply_markup=get_zodiac_keyboard()
+    )
 
 async def main() -> None:
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
