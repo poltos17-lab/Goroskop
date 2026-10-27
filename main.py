@@ -69,26 +69,37 @@ async def command_start_handler(message: Message) -> None:
 # 2. Обработчик нажатия на знак зодиака
 @dp.callback_query(F.data.startswith("sign_"))
 async def process_zodiac_choice(callback: CallbackQuery) -> None:
+    # Получаем идентификатор знака (например, "aries")
     sign_code = callback.data.split("_")[1]
     sign_name = next(name for code, name in ZODIAC_SIGNS if code == sign_code)
 
-    # Получаем текущую дату в формате "MM-DD" (например, "09-01")
-    today_key = datetime.now().strftime("%m-%d")
+    # 1. Получаем текущую дату с годом: "ГГГГ-ММ-ДД" (например, "2026-10-01")
+    today_key = datetime.now().strftime("%Y-%m-%d")
 
-    # Достаем гороскоп для выбранного знака на сегодня
-    today_horoscope = HOROSCOPES.get(today_key, {}).get(
-        sign_code, 
-        "К сожалению, гороскоп на сегодня не найден."
-    )
+    # 2. Достаем список знаков на сегодня из секции "days"
+    day_signs_list = HOROSCOPES.get("days", {}).get(today_key, [])
+
+    # 3. Ищем нужный знак в списке
+    forecast = None
+    headline = ""
+    for item in day_signs_list:
+        if item.get("signId") == sign_code:
+            forecast = item.get("generalText")
+            headline = item.get("headline", "")
+            break
 
     await callback.answer()
 
-    response_text = (
-        f"✨ {html.bold(sign_name)} — Гороскоп на сегодня:\n\n"
-        f"{today_horoscope}"
-    )
+    # 4. Проверяем, нашлось ли предсказание
+    if forecast:
+        text = f"✨ {html.bold(sign_name)}\n"
+        if headline:
+            text += f"📌 {html.italic(headline)}\n\n"
+        text += forecast
+    else:
+        text = f"К сожалению, гороскоп для знака {sign_name} на дату {today_key} не найден."
 
-    await callback.message.answer(response_text)
+    await callback.message.answer(text)
 
 
 async def main() -> None:
