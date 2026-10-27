@@ -131,8 +131,6 @@ async def process_zodiac_choice(callback: CallbackQuery) -> None:
     # Объединяем все строки через перенос
     final_text = "\n".join(message_lines)
 
-    await callback.message.answer(final_text)
-
     # Создаем кнопку «Назад»
     back_keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
